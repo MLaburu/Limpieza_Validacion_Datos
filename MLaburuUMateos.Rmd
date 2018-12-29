@@ -27,80 +27,43 @@ knitr::opts_chunk$set(eval=T, echo=T)
 
 ## Carga de Datos
 
-Se realiza la carga del conjunto de datos, as�? como la selección de las variables con las que se va a trabajar. Explicar por qué estas, y hacer una descripcion del dataset
+Se realiza la carga del conjunto de datos, as?? como la selección de las variables con las que se va a trabajar. Explicar por qué estas, y hacer una descripcion del dataset
 
 ```{r message= FALSE, warning=FALSE}
 #Cargamos el Dataset
-myData <- read.csv("Crime_Data_2010_2017.csv", header = TRUE, sep = ",")
+myData <- read.csv("BlackFriday.csv", header = TRUE, sep = ",")
 # Mostrar las primeras 10 lineas del dataset y el contenido de 9 variables
 head(myData[,1:9],10)
 # Tipo de los datos de cada variable
 sapply(myData,class)
 ```
 
-Selección de atributos
 
 ```{r message= FALSE, warning=FALSE}
-myDataAux <- myData[,c("DR.Number","Date.Occurred","Time.Occurred","Area.Name",
-                       "Crime.Code","Crime.Code.Description","Victim.Age",
-                       "Victim.Sex","Victim.Descent","Premise.Description",
-                       "Weapon.Used.Code","Weapon.Description")]
-library(lubridate)
-DiaSemana <-  wday(mdy(myDataAux$Date.Occurred))
-myDataAux <- cbind(myDataAux, DiaSemana)
-Mes <- month.abb[month(mdy(myDataAux$Date.Occurred))]
-myDataAux <- cbind(myDataAux, Mes)
+myDataAux <- myData[,c("Gender","Age","Occupation","City_Category","Stay_In_Current_City_Years","Marital_Status","Product_Category_1","Product_Category_2","Product_Category_3","Purchase")]
 ```
 
-Limpieza por Sexo
 
 ```{r message= FALSE, warning=FALSE}
-#Se observan los tipos de valores
-summary(myDataAux$Victim.Sex)
-idx <- c("M", "F", "X")
-myDataAux <- myDataAux[myDataAux$Victim.Sex %in% idx,]
-myDataAux$Victim.Sex <- as.character(myDataAux$Victim.Sex)
-myDataAux$Victim.Sex <- as.factor(myDataAux$Victim.Sex)
-summary(myDataAux$Victim.Sex)
-
 colSums(is.na(myDataAux))
-colSums(myDataAux=="")
-
-# Comprobación de campos vac�?os o NA en Weapon.Used.Code y Weapon.Description
-myDataAux$Weapon.Used.Code[is.na(myDataAux$Weapon.Used.Code)] = "Unknown"
-myDataAux$Weapon.Description <- as.character(myDataAux$Weapon.Description)
-myDataAux$Weapon.Description[myDataAux$Weapon.Description == ""] = "Unknown"
-myDataAux$Weapon.Description <- as.factor(myDataAux$Weapon.Description)
-
-# Tratamiento de campos vacios en Premise.Description
-myDataAux$Premise.Description <- as.character(myDataAux$Premise.Description)
-myDataAux$Premise.Description[myDataAux$Premise.Description == ""] = "Unknown"
-myDataAux$Premise.Description <- as.factor(myDataAux$Premise.Description)
-
-# Tratamiento de campos vacios en Victim.Descent
-myDataAux$Victim.Descent <- as.character(myDataAux$Victim.Descent)
-myDataAux$Victim.Descent[myDataAux$Victim.Descent == ""] = "Unknown"
-myDataAux$Victim.Descent <- as.factor(myDataAux$Victim.Descent)
-
-# Tratamiento de campos vacios en Crime.Code.Description
-myDataAux$Crime.Code.Description <- as.character(myDataAux$Crime.Code.Description)
-myDataAux$Crime.Code.Description[myDataAux$Crime.Code.Description == ""] = "Unknown"
-myDataAux$Crime.Code.Description <- as.factor(myDataAux$Crime.Code.Description)
-
-colSums(is.na(myDataAux))
-colSums(myDataAux=="")
-
-# Tratamiento de valores NA en Victim.Age
-library(VIM)
-myDataAux$Victim.Age <- kNN(myDataAux)$Victim.Age
+colSums(myDataAux == "?")
+colSums(myDataAux == "")
+myDataAux$Product_Category_2[is.na(myDataAux$Product_Category_2)] <- 0
+myDataAux$Product_Category_3[is.na(myDataAux$Product_Category_3)] <- 0
+str(myDataAux)
+myDataAux$Product_Category_2 <- as.integer(myDataAux$Product_Category_2)
+myDataAux$Product_Category_3 <- as.integer(myDataAux$Product_Category_3)
+str(myDataAux)
 ```
 
 
 
 ```{r message= FALSE, warning=FALSE}
 #Comentario
-#myDataAux$Date.Occurred <- as.Date(myDataAux$Date.Occurred, format = "%m/%d/%Y")
-
+boxplot(myDataAux$Purchase)
+valoresAtiPurch <- boxplot.stats(myDataAux$Purchase)$out
+length(valoresAtiPurch)
+valoresAtiPurch[0:69]
 ```
 
 ```{r message= FALSE, warning=FALSE}
