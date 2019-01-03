@@ -1,5 +1,5 @@
 ---
-title: 'PrÃ¡ctica 2: Limpieza y validaciÃ³n de los datos'
+title: 'Práctica 2: Limpieza y validación de los datos'
 author: "Autores: Mikel Laburu Haro, Unai Mateos Corral"
 date: "Curso 2018/2019"
 output:
@@ -22,16 +22,16 @@ knitr::opts_chunk$set(eval=T, echo=T)
 ```
 
 ******
-# Introducción
+# Introducci?n
 
-## Descripción
+## Descripci?n
 ## Objetivos
 ## Competencias
 ******
 
-# Descripción del dataset
+# Descripci?n del dataset
 
-Se realiza la carga del conjunto de datos, así como la selección de las variables con las que se va a trabajar. Explicar por qué estas, y hacer una descripcion del dataset.
+Se realiza la carga del conjunto de datos, as? como la selecci?n de las variables con las que se va a trabajar. Explicar por qu? estas, y hacer una descripcion del dataset.
 
 ```{r message= FALSE, warning=FALSE}
 #Cargamos el Dataset
@@ -42,7 +42,7 @@ head(myData[,1:9],10)
 sapply(myData,class)
 ```
 
-# Integración y selección de los datos de interés a analizar
+# Integraci?n y selecci?n de los datos de inter?s a analizar
 
 ```{r message= FALSE, warning=FALSE}
 myDataAux <- myData[,c("Gender","Age","Occupation","City_Category","Stay_In_Current_City_Years",
@@ -51,7 +51,7 @@ myDataAux <- myData[,c("Gender","Age","Occupation","City_Category","Stay_In_Curr
 ```
 
 # Limpieza de los datos
-## Eliminación de ceros, vacios y nulos
+## Eliminaci?n de ceros, vacios y nulos
 
 ```{r message= FALSE, warning=FALSE}
 colSums(is.na(myDataAux))
@@ -68,7 +68,7 @@ myDataAux$Product_Category_3 <- as.factor(myDataAux$Product_Category_3)
 str(myDataAux)
 ```
 
-## Identificación y tratamiento de valores extremos
+## Identificaci?n y tratamiento de valores extremos
 
 ```{r message= FALSE, warning=FALSE}
 #Comentario
@@ -78,24 +78,28 @@ length(valoresAtiPurch)
 valoresAtiPurch[0:69]
 ```
 
-# Análisis de los datos
-## Selección de los grupos de datos a analizar
+# An?lisis de los datos
+## Selecci?n de los grupos de datos a analizar
 
 ```{r message= FALSE, warning=FALSE}
-# Agrupación en funcion del estado civil
+# Agrupaci?n en funcion del estado civil
 myDataAux.solteros <- myDataAux[myDataAux$Marital_Status == 0,]
 myDataAux.casados <- myDataAux[myDataAux$Marital_Status == 1,]
 
-# Agrupación en funcion de la categoría de la ciudad
+# Agrupaci?n en funcion del tiempo en la ciudad
+myDataAux.nuevos <- myDataAux[myDataAux$Stay_In_Current_City_Years == '0' | myDataAux$Stay_In_Current_City_Years == '1' | myDataAux$Stay_In_Current_City_Years == '2',]
+myDataAux.antiguos <- myDataAux[myDataAux$Stay_In_Current_City_Years == '3' | myDataAux$Stay_In_Current_City_Years == '4+',]
+
+# Agrupaci?n en funcion de la categor?a de la ciudad
 myDataAux.ciudadA <- myDataAux[myDataAux$City_Category == "A",]
 myDataAux.ciudadB <- myDataAux[myDataAux$City_Category == "B",]
 myDataAux.ciudadC <- myDataAux[myDataAux$City_Category == "C",]
 
-# Agrupación en funcion del genero
+# Agrupaci?n en funcion del genero
 myDataAux.hombres <- myDataAux[myDataAux$Gender == "M",]
 myDataAux.mujeres <- myDataAux[myDataAux$Gender == "F",]
 
-# Agrupación en funcion de la categoría de la edad
+# Agrupaci?n en funcion de la categor?a de la edad
 myDataAux.edad1 <- myDataAux[myDataAux$Age == "0-17",]
 myDataAux.edad2 <- myDataAux[myDataAux$Age == "18-25",]
 myDataAux.edad3 <- myDataAux[myDataAux$Age == "26-35",]
@@ -106,9 +110,9 @@ myDataAux.edad7 <- myDataAux[myDataAux$Age == "55+",]
 
 ```
 
-## Comprobación de la normalidad y homogeneidad de la varianza
+## Comprobaci?n de la normalidad y homogeneidad de la varianza
 
-La normalidad ha de calcularse solo con las variables numéricas, teniendo en nuestro caso simplemente el campo "Purchase", puesto que aunque el resto de variables también lo puedan paracer se tratan de variables discretas cuyos valores representan una categoría o estado.Dicho esto, porcedemos a calcular la normalidad empleando la técnica de Anderson-Darlinng, con la que habrá que comparar el p-valor obtenido por la aplicación de esta técnica con un porcentaje de significación del 5%, $\alpha=0,05$, teniendo que ser el p-valor obtenido menor que $\alpha$ para que esta variable sea normal. Aunque existen diferentes test para determinar si un conjunto de datos sigue una distribución normal, se ha optado por el test comentado debido a que es el más adecuado cuando el dataset esta constituido por un gran número de instancias.
+La normalidad ha de calcularse solo con las variables num?ricas, teniendo en nuestro caso simplemente el campo "Purchase", puesto que aunque el resto de variables tambi?n lo puedan paracer se tratan de variables discretas cuyos valores representan una categor?a o estado.Dicho esto, porcedemos a calcular la normalidad empleando la t?cnica de Anderson-Darlinng, con la que habr? que comparar el p-valor obtenido por la aplicaci?n de esta t?cnica con un porcentaje de significaci?n del 5%, $\alpha=0,05$, teniendo que ser el p-valor obtenido menor que $\alpha$ para que esta variable sea normal. Aunque existen diferentes test para determinar si un conjunto de datos sigue una distribuci?n normal, se ha optado por el test comentado debido a que es el m?s adecuado cuando el dataset esta constituido por un gran n?mero de instancias.
 
 ```{r message= FALSE, warning=FALSE}
 # Normalidad
@@ -118,10 +122,11 @@ ad.test(myDataAux$Purchase)
 
 ```
 
-Tras lograr el p-valor correspondiente a la variable no categórica "Purchase", se puede determinar que no sigue una distribución normal, puesto que su p-valor es inferior a $\alpha=0,05$.
+Tras lograr el p-valor correspondiente a la variable no categ?rica "Purchase", se puede determinar que no sigue una distribuci?n normal, puesto que su p-valor es inferior a $\alpha=0,05$.
 
 
-La homogeneidad será calculada entre mútiples pares de atributos, el primero de ellos formado por los atributos que representan el gasto realizado junto con el estado civil de cada persona, y el segundo, por su parte, con los atributos que representan el gasto de cada persona junto con su género. Para ello, se empleará el F-test, tal y como se aprecia a continuación:
+La homogeneidad ser? calculada entre m?tiples pares de atributos, el primero de ellos formado por los atributos que representan el gasto realizado junto con el estado civil de cada persona, y el segundo, por su parte, con los atributos que representan el gasto de cada persona junto con su g?nero. Para ello, se emplear? el F-test, tal y como se aprecia a continuaci?n:
+
 ```{r message= FALSE, warning=FALSE}
 # Homogeneidad
 var.test(Purchase~Marital_Status, data = myDataAux)
@@ -129,29 +134,97 @@ var.test(Purchase~Gender, data = myDataAux)
 
 ```
 
-En el caso en el que se mide la homegeniedad entre el gasto y el estado civil el p-valor obtenido es de 0.2897, siendo mucho mayor que 0.05, con lo que se considera que no hay diferencias significativcas entre las varianzas de ambos grupos. No obstante, cuando la homegeneidad es medida entre el gasto de cada persona junto con su género, el p-valor resultante es de 2.2e-16, siendo considerablemente inferior a 0.05, por lo que si hay diferencias entre las varianzas de estos dos grupos.
+En el caso en el que se mide la homegeniedad entre el gasto y el estado civil el p-valor obtenido es de 0.2897, siendo mucho mayor que 0.05, con lo que se considera que no hay diferencias significativcas entre las varianzas de ambos grupos. No obstante, cuando la homegeneidad es medida entre el gasto de cada persona junto con su g?nero, el p-valor resultante es de 2.2e-16, siendo considerablemente inferior a 0.05, por lo que si hay diferencias entre las varianzas de estos dos grupos.
 
-## Aplicación de pruebas estadísticas
-A continuación se va a proceder a realizar un análisis estadístico, en el que se efecuará una prueba de correalación, un contraste de hipótesis y un regreseión lineal.
+## Aplicaci?n de pruebas estad?sticas
+A continuaci?n se va a proceder a realizar un an?lisis estad?stico, en el que se efecuar? un contraste de hip?tesis, un regresei?n lineal y una regresi?n log?stica. En estos casos tambi?n se suele realizar una estudio de correlaci?n entre variables, pero en este caso, tal y como ya se ha mencionado con anterioridad solo se dispone de un atributo num?rico, que es el campo "Purchase", por lo que es imposible llevar a cabo este estudio.
 
+### Contraste de hip?tesis
 
+Se plantea una hip?tesis en la que se desea saber si los habitantes de una ciudad que llevan 3 a?os o m?s viviendo en ella gastan m?s en el Black Friday que los que llevan menos tiempo. Para ello se emplear?n los grupos de datos "myDataAux.nuevos" y "myDataAux.Antiguos" creados anteriormente.
+
+As?, se plantea el siguiente contraste de hip?tesis de dos muestras sobre la diferencia de medias, el cual es unilateral atendiendo a la formulaci?n de la hip?tesis alternativa:
+El contrate de hip?tesis de dos muestras sobre la diferencia de medias es planteado de la siguiente forma, siendo unilateral atendiendo a la formulaci?n de la hip?tesis alternativa:
+
+$$
+H_{0}: \mu_{1} - \mu_{2} = 0; H_{1}: \mu_{1} - \mu_{2} < 0
+$$
+
+donde $\mu_{1}$ representa la media de la poblaci?n de la que se extr?e la primera muestra, y $\mu_{2}$, por su parte, la media de la poblaci?n de la segunda muestra. Fijando el valor de significaci?n $\alpha=0.05$.
+
+```{r message= FALSE, warning=FALSE}
+t.test(myDataAux.antiguos$Purchase, myDataAux.nuevos$Purchase, alternative = "less")
+```
+
+Tras observar estos resultados queda claro que la hip?tesis planteada es cierta, puesto que p-valor obtenido es significativamente mayor que $\alpha=0.05$. Adem?s se aprecia que la media de gasto para los habitantes que llevan resideiendo en una ciudad 3 o m?s a?os es de $9348.655$, mientras que en el caso contrario, toma una media de $9299.699$.
+
+Se plantea un segundo contraste de hip?tesis de dos muestras sobre la diferencia de medias, en el que se pretende averiguar si las personas pertenecientes al g?nero masculino gastan m?s que las del g?nero femenino en sus compras del Black Friday. En este caso se emplear?n las agrupaciones de datos "myDataAux.hombres" y "myDataAux.mujeres" generadas en apartados anteriores.
+
+El planteamiento del contraste de hip?tesis sigue el mismo formato que el anterior, solo que en este caso $\mu_{1}$ representa la media del gasto de los hombres y $\mu_{2}$ la media del gasto de las mujeres. En este caso el contraste tambi?n ha de ser unilateral atendiendo a la formulaci?n de la hip?tesis alternativa, y tambi?n se fijar? un nivel de confianza del $95%$.
+
+```{r message= FALSE, warning=FALSE}
+t.test(myDataAux.hombres$Purchase, myDataAux.mujeres$Purchase, alternative = "less")
+
+```
+
+Con lo que tras haber llevado a cabo este contraste de hip?tesis se puede decir que los hombres gastan m?s que las mujeres en sus compras del Black Friday, por las mismas razones que en el caso anterior.
+
+### Regresi?n lineal
+
+En este apartado se podr?n hacer predicciones en cuanto al gasto en el Black Friday de cada persona en funci?n de las caracter?sticas que esta muestre. Se proceder? a generar m?s de un modelo, donde en cada uno de ellos se tendr?n en cuenta m?tiples variable, para as? poder determinar qu? combinaci?n de ellas provoca que el gasto sea mayor.
+```{r message= FALSE, warning=FALSE}
+#Comentario
+
+model_1 <- lm(Purchase ~ Product_Category_1 + Product_Category_2 + Product_Category_3, data = myDataAux)
+model_2 <- lm(Purchase ~ Product_Category_1 + Age, data = myDataAux)
+model_3 <- lm(Purchase ~ Product_Category_2 + Age, data = myDataAux)
+model_4 <- lm(Purchase ~ Product_Category_3 + Age, data = myDataAux)
+model_5 <- lm(Purchase ~ Occupation + Gender, data = myDataAux)
+
+resultados <- matrix(c(1, summary(model_1)$r.squared,
+                       2, summary(model_2)$r.squared,
+                       3, summary(model_3)$r.squared,
+                       4, summary(model_4)$r.squared,
+                       5, summary(model_5)$r.squared),
+                     ncol = 2, byrow = TRUE)
+
+colnames(resultados) <- c("Modelo", "R^2")
+
+resultados
+```
+
+### Regresión logística
+
+La regresion logistica trabaja con valores binarios, es decir, que tomen un valor 0 o 1, dependiendo de la variable. En el caso del dataset que disponemos, no nos econtramos con una variable que nos permita realizar un estudio correcto a traves de una regresion logistica. Por ello, para aplicar este tipo de regresion, basandonos en el valor de la cantidad de Purchase, se va a generar una variable que indique si un sujeto gasta mas de 5.000 dolares o menos. Si pucrhcase > 8000, la nueva variable tendra valor 1 y si no, valor 0. De esta manera, se podria llegar a analizar, que requisitos puede cumplir un sujeto a la hora de gastar mas dinero en el black friday o menos.
 
 ```{r message= FALSE, warning=FALSE}
 #Comentario
+gasta <- ifelse(myDataAux$Purchase > 8000,1,0)
+myDataAux <- cbind(myDataAux,gasta)
+myDataAux$gasta <- as.factor(myDataAux$gasta)
+table(myDataAux$gasta)
+modeloLog1 <- glm(gasta ~ Product_Category_1 + Product_Category_2 + Product_Category_3, data = myDataAux, family = "binomial")
+modeloLog2 <- glm(gasta ~ Product_Category_1 + Age, data = myDataAux, family = "binomial")
+modeloLog3 <- glm(gasta ~ Product_Category_2 + Age, data = myDataAux, family = "binomial")
+modeloLog4 <- glm(gasta ~ Product_Category_3 + Age, data = myDataAux, family = "binomial")
+modeloLog5 <- glm(gasta ~ Occupation + Gender, data = myDataAux, family = "binomial")
+```
+
+Escogemos la que mejor valor de AIC, obtiene, es decir, la que menor valor tenga en el apartado visualizado en summary. Este indicador, se utiliza para comparar.
+
+Visualizamos la curva ROC y su valor AUC. Para ello, se obtendran las predicciones del mejor modelo, es decir, se calcula las probabilidades con el modelo logistico de que un registro sea o "1" o "0":
+
+```{r message= FALSE, warning=FALSE}
+#Comentario
+predicciones <- predict(modeloLog1, type = "response")
+library(pROC)
+myDataAux$prob = predicciones
+g <- roc(gasta ~ prob, data = datosAux)
+plot(g)
+auc(g)
 ```
 
 ```{r message= FALSE, warning=FALSE}
 #Comentario
-```
 
-```{r message= FALSE, warning=FALSE}
-#Comentario
-```
-
-```{r message= FALSE, warning=FALSE}
-#Comentario
-```
-
-```{r message= FALSE, warning=FALSE}
-#Comentario
 ```
