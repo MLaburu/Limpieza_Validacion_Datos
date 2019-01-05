@@ -21,7 +21,12 @@ Para ejecutar el código de r, es necesario descargarse el archivo rmarkdown, es
 
 Para poder ejecutarlo, sera necesario tener disponibles los siguientes paquetes:
 * VIM
-* GGPLOT2
-* ...
+* ggplot2
+* nortest
+* pROC
 
 ## Recursos
+1.  Gibergans Bàguena, J. _Regresión lineal múltiple_. Editorial UOC.
+2. [Análisis de la homogeneidad de varianza](https://rpubs.com/Joaquin_AR/218466).
+3. [Regresión lineal](https://rpubs.com/Joaquin_AR/254575).
+4. [Regresión logística](https://www.theanalysisfactor.com/introduction-to-logistic-regression/)
