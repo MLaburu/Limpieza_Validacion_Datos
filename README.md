@@ -15,6 +15,7 @@ El repositorio, contiene los documentos que han sido generados a lo largo de la 
 * MLaburuUmateos.Rmd: El archivo que contiene el código en r, que contiene las técnicas y análisis realizado al conjunto de datos. 
 * MLaburuUMateos.pdf: Documento pdf de la práctica.
 * FIFA.csv: Dataset original en formato "csv".
+* FIFA-Cleaned: Dataset preporcesado en formato "csv".
 
 ## Manual de Usuario
 Para ejecutar el código de r, es necesario descargarse el archivo rmarkdown, es decir el documento con extensión .Rmd y abrirlo en un entorno compatible con el mismo. En su caso, se recomienda Rstudio.
